@@ -33,7 +33,7 @@ export function AllocationDonut() {
               ))}
             </Pie>
             <Tooltip
-              formatter={(value: number) => formatCurrency(value)}
+              formatter={(value) => formatCurrency(Number(value))}
               contentStyle={{
                 background: 'rgba(15,15,25,0.9)',
                 border: '1px solid rgba(255,255,255,0.1)',

@@ -6,7 +6,6 @@ import { ArrowUpRight, ArrowDownRight, Briefcase } from 'lucide-react'
 export function PortfolioPage() {
   const p = MOCK_PORTFOLIO
   const totalInvested = MOCK_HOLDINGS.reduce((sum, h) => sum + h.shares * h.avgCost, 0)
-  const totalCurrent = MOCK_HOLDINGS.reduce((sum, h) => sum + h.shares * h.currentPrice, 0)
 
   return (
     <div className="max-w-[1200px] space-y-4">

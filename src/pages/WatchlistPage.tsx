@@ -1,7 +1,6 @@
 import { GlassCard } from '@/components/ui/GlassCard'
-import { GlassButton } from '@/components/ui/GlassButton'
 import { MOCK_WATCHLIST, POPULAR_STOCKS } from '@/lib/mock-data'
-import { formatCurrency, formatPercent, formatNumber } from '@/lib/utils'
+import { formatCurrency, formatPercent } from '@/lib/utils'
 import { Eye, ArrowUpRight, ArrowDownRight, Plus, Trash2 } from 'lucide-react'
 
 export function WatchlistPage() {
