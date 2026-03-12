@@ -7,10 +7,10 @@ import {
   Clock,
   Eye,
   Search,
-  TrendingUp,
   LogOut,
   Info,
 } from 'lucide-react'
+import { AppLogo } from '@/components/ui/AppLogo'
 
 interface SidebarProps {
   activePage: string
@@ -37,9 +37,7 @@ export function Sidebar({ activePage, onNavigate }: SidebarProps) {
     <aside className="bg-black h-full w-[240px] flex flex-col border-r border-border p-5 shrink-0">
       {/* Logo */}
       <div className="flex items-center gap-2.5 px-2 mb-8">
-        <div className="w-9 h-9 rounded-xl bg-white/[0.08] border border-border flex items-center justify-center">
-          <TrendingUp size={18} className="text-white" />
-        </div>
+        <AppLogo size={36} />
         <div>
           <h1 className="text-base font-semibold text-text-primary tracking-tight">TradeSim</h1>
           <p className="text-[10px] text-text-muted uppercase tracking-widest">Paper Trading</p>

@@ -1,7 +1,7 @@
 import { GlassCard } from '@/components/ui/GlassCard'
 import { GlassButton } from '@/components/ui/GlassButton'
 import { useAuth } from '@/contexts/AuthContext'
-import { TrendingUp } from 'lucide-react'
+import { AppLogo } from '@/components/ui/AppLogo'
 
 export function LoginPage() {
   const { signInWithGoogle } = useAuth()
@@ -9,8 +9,8 @@ export function LoginPage() {
   return (
     <div className="flex items-center justify-center h-full bg-surface">
       <GlassCard elevated className="w-[400px] p-8 text-center">
-        <div className="w-16 h-16 rounded-2xl bg-white/[0.08] border border-border flex items-center justify-center mx-auto mb-6">
-          <TrendingUp size={28} className="text-white" />
+        <div className="mx-auto mb-6">
+          <AppLogo size={64} />
         </div>
         <h1 className="mb-2 text-2xl font-bold">TradeSim</h1>
         <p className="p-2 text-sm leading-relaxed text-text-muted mb-8">
