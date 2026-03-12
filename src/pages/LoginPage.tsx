@@ -7,21 +7,22 @@ export function LoginPage() {
   const { signInWithGoogle } = useAuth()
 
   return (
-    <div className="h-full flex items-center justify-center bg-surface">
+    <div className="flex items-center justify-center h-full bg-surface">
       <GlassCard elevated className="w-[400px] p-8 text-center">
         <div className="w-16 h-16 rounded-2xl bg-white/[0.08] border border-border flex items-center justify-center mx-auto mb-6">
           <TrendingUp size={28} className="text-white" />
         </div>
-        <h1 className="text-2xl font-bold mb-2">TradeSim</h1>
-        <p className="text-sm text-text-muted mb-8">
-          Paper trade Indian stocks with virtual money.<br />
+        <h1 className="mb-2 text-2xl font-bold">TradeSim</h1>
+        <p className="p-2 text-sm leading-relaxed text-text-muted mb-8">
+          Paper trade Indian stocks with virtual money.
+          <br />
           Real market data. Zero risk.
         </p>
 
         <GlassButton
           variant="accent"
           size="lg"
-          className="w-full flex items-center justify-center gap-3"
+          className="flex items-center justify-center w-full gap-3"
           onClick={signInWithGoogle}
         >
           <svg width="18" height="18" viewBox="0 0 24 24">

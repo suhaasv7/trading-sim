@@ -110,7 +110,7 @@ export function DashboardPage({ onNavigate }: DashboardPageProps) {
                   <p className="text-sm text-right self-center">{h.shares}</p>
                   <div className="text-right self-center">
                     <p className="text-sm">{formatCurrency(h.currentPrice)}</p>
-                    <p className={`text-[11px] ${h.change >= 0 ? 'text-gain' : 'text-loss'}`}>{h.change >= 0 ? '+' : ''}{h.change.toFixed(2)}</p>
+                    <p className={`text-[11px] ${h.currentPrice - h.avg_cost_basis >= 0 ? 'text-gain' : 'text-loss'}`}>{h.currentPrice - h.avg_cost_basis >= 0 ? '+' : ''}{(h.currentPrice - h.avg_cost_basis).toFixed(2)}</p>
                   </div>
                   <p className="text-sm font-medium text-right self-center">{formatCurrency(value)}</p>
                   <div className="text-right self-center">

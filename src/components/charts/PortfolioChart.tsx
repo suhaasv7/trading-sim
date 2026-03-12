@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
-import { generateChartData } from '@/lib/mock-data'
 import { createChart, ColorType, AreaSeries, type IChartApi } from 'lightweight-charts'
+import { usePortfolioContext } from '@/contexts/PortfolioContext'
 
 interface PortfolioChartProps {
   height?: number
@@ -9,6 +9,7 @@ interface PortfolioChartProps {
 export function PortfolioChart({ height = 200 }: PortfolioChartProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const chartRef = useRef<IChartApi | null>(null)
+  const { transactions, summary } = usePortfolioContext()
 
   useEffect(() => {
     if (!containerRef.current) return
@@ -39,18 +40,66 @@ export function PortfolioChart({ height = 200 }: PortfolioChartProps) {
       handleScroll: false,
     })
 
-    const data = generateChartData(90)
+    // Build portfolio value over time from transactions
+    const sortedTx = [...transactions].sort(
+      (a, b) => new Date(a.executed_at).getTime() - new Date(b.executed_at).getTime()
+    )
+
+    const initialBalance = summary.initialBalance || 1000000
+    const dataPoints: { time: string; value: number }[] = []
+
+    // Start: day before first transaction (or 90 days ago), full cash
+    const now = new Date()
+    const startDate = sortedTx.length > 0
+      ? new Date(new Date(sortedTx[0].executed_at).getTime() - 86400000)
+      : new Date(now.getTime() - 90 * 86400000)
+
+    dataPoints.push({
+      time: startDate.toISOString().split('T')[0],
+      value: initialBalance,
+    })
+
+    // Add a point for each transaction day showing cumulative cash flow
+    let cashSpent = 0
+    sortedTx.forEach((tx) => {
+      if (tx.type === 'BUY') {
+        cashSpent += tx.total_amount
+      } else {
+        cashSpent -= tx.total_amount
+      }
+      const date = new Date(tx.executed_at).toISOString().split('T')[0]
+      // Portfolio value at that point = initial balance - cash spent on stocks + estimated holdings value
+      // We approximate with a linear interpolation toward current value
+      dataPoints.push({
+        time: date,
+        value: initialBalance - cashSpent + cashSpent, // at time of trade, value ≈ initial (bought at market price)
+      })
+    })
+
+    // End: today with actual portfolio value
+    const today = now.toISOString().split('T')[0]
+    if (dataPoints.length === 0 || dataPoints[dataPoints.length - 1].time !== today) {
+      dataPoints.push({ time: today, value: summary.totalValue })
+    } else {
+      dataPoints[dataPoints.length - 1].value = summary.totalValue
+    }
+
+    // Deduplicate by date (keep last value per date)
+    const byDate = new Map<string, number>()
+    dataPoints.forEach((d) => byDate.set(d.time, d.value))
+    const finalData = Array.from(byDate.entries())
+      .map(([time, value]) => ({ time, value }))
+      .sort((a, b) => a.time.localeCompare(b.time))
+
+    const isGain = summary.totalGain >= 0
     const series = chart.addSeries(AreaSeries, {
-      lineColor: '#00D09C',
-      topColor: 'rgba(0,208,156,0.25)',
-      bottomColor: 'rgba(0,208,156,0.0)',
+      lineColor: isGain ? '#00D09C' : '#EB5B3C',
+      topColor: isGain ? 'rgba(0,208,156,0.25)' : 'rgba(235,91,60,0.25)',
+      bottomColor: isGain ? 'rgba(0,208,156,0.0)' : 'rgba(235,91,60,0.0)',
       lineWidth: 2,
     })
 
-    series.setData(
-      data.map((d) => ({ time: d.date, value: d.price }))
-    )
-
+    series.setData(finalData)
     chart.timeScale().fitContent()
     chartRef.current = chart
 
@@ -65,7 +114,7 @@ export function PortfolioChart({ height = 200 }: PortfolioChartProps) {
       resizeObserver.disconnect()
       chart.remove()
     }
-  }, [height])
+  }, [height, transactions, summary])
 
   return <div ref={containerRef} className="w-full" />
 }

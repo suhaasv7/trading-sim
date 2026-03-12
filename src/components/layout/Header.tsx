@@ -4,7 +4,7 @@ import { TrendingUp, TrendingDown, Wallet, RefreshCw } from 'lucide-react'
 
 export function Header() {
   const { summary, refreshPrices, apiCallsUsed, refreshing } = usePortfolioContext()
-  const isUp = summary.dayGain >= 0
+  const isUp = summary.totalGain >= 0
   const callsRemaining = 25 - apiCallsUsed
 
   return (
@@ -26,9 +26,9 @@ export function Header() {
             </div>
           )}
           <div>
-            <p className="text-xs text-text-muted">Today</p>
+            <p className="text-xs text-text-muted">Total P&L</p>
             <p className={`text-sm font-semibold ${isUp ? 'text-gain' : 'text-loss'}`}>
-              {isUp ? '+' : ''}{formatCurrency(summary.dayGain)} ({formatPercent(summary.dayGainPercent)})
+              {isUp ? '+' : ''}{formatCurrency(summary.totalGain)} ({formatPercent(summary.totalGainPercent)})
             </p>
           </div>
         </div>
