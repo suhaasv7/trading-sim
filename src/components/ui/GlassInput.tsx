@@ -17,10 +17,10 @@ export const GlassInput = forwardRef<HTMLInputElement, GlassInputProps>(
         <input
           ref={ref}
           className={cn(
-            'w-full glass rounded-xl px-4 py-3 text-sm text-text-primary',
+            'w-full bg-surface-card border border-border rounded-lg px-4 py-3 text-sm text-text-primary',
             'placeholder:text-text-muted',
-            'focus:outline-none focus:border-accent/40 focus:bg-glass-hover',
-            'transition-all duration-200',
+            'focus:outline-none focus:border-white/[0.25] focus:bg-white/[0.04]',
+            'transition-colors duration-200',
             icon && 'pl-10',
             className
           )}

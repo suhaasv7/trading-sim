@@ -32,8 +32,8 @@ export function PortfolioChart({ height = 200 }: PortfolioChartProps) {
         timeVisible: false,
       },
       crosshair: {
-        vertLine: { color: 'rgba(129,140,248,0.3)', width: 1, style: 2 },
-        horzLine: { color: 'rgba(129,140,248,0.3)', width: 1, style: 2 },
+        vertLine: { color: 'rgba(255,255,255,0.3)', width: 1, style: 2 },
+        horzLine: { color: 'rgba(255,255,255,0.3)', width: 1, style: 2 },
       },
       handleScale: false,
       handleScroll: false,
@@ -41,9 +41,9 @@ export function PortfolioChart({ height = 200 }: PortfolioChartProps) {
 
     const data = generateChartData(90)
     const series = chart.addSeries(AreaSeries, {
-      lineColor: '#818cf8',
-      topColor: 'rgba(129,140,248,0.25)',
-      bottomColor: 'rgba(129,140,248,0.0)',
+      lineColor: '#00D09C',
+      topColor: 'rgba(0,208,156,0.25)',
+      bottomColor: 'rgba(0,208,156,0.0)',
       lineWidth: 2,
     })
 

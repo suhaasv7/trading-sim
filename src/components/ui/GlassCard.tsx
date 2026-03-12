@@ -10,9 +10,9 @@ export function GlassCard({ elevated, hover, children, className, ...props }: Gl
   return (
     <div
       className={cn(
-        'rounded-2xl transition-all duration-300',
-        elevated ? 'glass-elevated' : 'glass',
-        hover && 'hover:bg-glass-hover hover:border-glass-highlight hover:scale-[1.01] cursor-pointer',
+        'rounded-xl transition-colors duration-200',
+        elevated ? 'card-elevated' : 'card',
+        hover && 'hover:border-border-hover hover:bg-white/[0.03] cursor-pointer',
         className
       )}
       {...props}

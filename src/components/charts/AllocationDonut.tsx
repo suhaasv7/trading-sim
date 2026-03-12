@@ -1,15 +1,16 @@
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts'
-import { MOCK_HOLDINGS } from '@/lib/mock-data'
+import { usePortfolioContext } from '@/contexts/PortfolioContext'
 import { formatCurrency } from '@/lib/utils'
 
 const COLORS = [
-  '#818cf8', '#a78bfa', '#c084fc',
-  '#34d399', '#22d3ee', '#fbbf24',
+  '#00D09C', '#3B82F6', '#F59E0B',
+  '#EC4899', '#8B5CF6', '#06B6D4',
 ]
 
 export function AllocationDonut() {
-  const data = MOCK_HOLDINGS.map((h) => ({
-    name: h.ticker,
+  const { holdings } = usePortfolioContext()
+  const data = holdings.map((h) => ({
+    name: h.ticker.replace('.BSE', ''),
     value: h.shares * h.currentPrice,
   }))
 
@@ -35,7 +36,7 @@ export function AllocationDonut() {
             <Tooltip
               formatter={(value) => formatCurrency(Number(value))}
               contentStyle={{
-                background: 'rgba(15,15,25,0.9)',
+                background: '#111111',
                 border: '1px solid rgba(255,255,255,0.1)',
                 borderRadius: '12px',
                 color: '#f0f0f3',
@@ -52,7 +53,7 @@ export function AllocationDonut() {
               className="w-2.5 h-2.5 rounded-full"
               style={{ backgroundColor: COLORS[i % COLORS.length] }}
             />
-            <span className="text-text-secondary">{item.name}</span>
+            <span className="text-text-secondary">{item.name.replace('.BSE', '')}</span>
             <span className="text-text-muted ml-auto">{formatCurrency(item.value)}</span>
           </div>
         ))}

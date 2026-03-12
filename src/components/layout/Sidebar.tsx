@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils'
+import { useAuth } from '@/contexts/AuthContext'
 import {
   LayoutDashboard,
   ArrowLeftRight,
@@ -8,6 +9,7 @@ import {
   Search,
   TrendingUp,
   LogOut,
+  Info,
 } from 'lucide-react'
 
 interface SidebarProps {
@@ -21,15 +23,22 @@ const NAV_ITEMS = [
   { id: 'portfolio', label: 'Portfolio', icon: Briefcase },
   { id: 'history', label: 'History', icon: Clock },
   { id: 'watchlist', label: 'Watchlist', icon: Eye },
+  { id: 'info', label: 'Info', icon: Info },
 ]
 
 export function Sidebar({ activePage, onNavigate }: SidebarProps) {
+  const { user, profile, signOut } = useAuth()
+
+  const displayName = profile?.display_name || user?.user_metadata?.full_name || 'User'
+  const avatarUrl = profile?.avatar_url || user?.user_metadata?.avatar_url
+  const initials = displayName.split(' ').map((n: string) => n[0]).join('').slice(0, 2).toUpperCase()
+
   return (
-    <aside className="glass h-full w-[240px] flex flex-col border-r border-glass-border p-4 shrink-0">
+    <aside className="bg-black h-full w-[240px] flex flex-col border-r border-border p-5 shrink-0">
       {/* Logo */}
       <div className="flex items-center gap-2.5 px-2 mb-8">
-        <div className="w-9 h-9 rounded-xl bg-accent-bg border border-accent/30 flex items-center justify-center">
-          <TrendingUp size={18} className="text-accent" />
+        <div className="w-9 h-9 rounded-xl bg-white/[0.08] border border-border flex items-center justify-center">
+          <TrendingUp size={18} className="text-white" />
         </div>
         <div>
           <h1 className="text-base font-semibold text-text-primary tracking-tight">TradeSim</h1>
@@ -43,13 +52,13 @@ export function Sidebar({ activePage, onNavigate }: SidebarProps) {
         <input
           type="text"
           placeholder="Search stocks..."
-          className="w-full bg-white/[0.04] border border-glass-border rounded-xl py-2 pl-9 pr-3 text-xs text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent/30 transition-colors"
+          className="w-full bg-white/[0.04] border border-border rounded-lg py-2 pl-9 pr-3 text-xs text-text-primary placeholder:text-text-muted focus:outline-none focus:border-white/[0.2] transition-colors"
           onFocus={() => onNavigate('trade')}
         />
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 flex flex-col gap-1">
+      <nav className="flex-1 flex flex-col gap-1.5">
         {NAV_ITEMS.map((item) => {
           const Icon = item.icon
           const active = activePage === item.id
@@ -58,9 +67,9 @@ export function Sidebar({ activePage, onNavigate }: SidebarProps) {
               key={item.id}
               onClick={() => onNavigate(item.id)}
               className={cn(
-                'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer',
+                'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors duration-200 cursor-pointer focus:outline-none',
                 active
-                  ? 'bg-accent-bg border border-accent/20 text-accent'
+                  ? 'bg-white/[0.08] border border-white/[0.12] text-white'
                   : 'text-text-secondary hover:text-text-primary hover:bg-white/[0.04] border border-transparent'
               )}
             >
@@ -72,15 +81,19 @@ export function Sidebar({ activePage, onNavigate }: SidebarProps) {
       </nav>
 
       {/* User */}
-      <div className="glass rounded-xl p-3 flex items-center gap-3 mt-4">
-        <div className="w-8 h-8 rounded-full bg-accent-bg border border-accent/20 flex items-center justify-center text-xs font-semibold text-accent">
-          SV
-        </div>
+      <div className="bg-white/[0.04] border border-border rounded-lg p-3 flex items-center gap-3 mt-6">
+        {avatarUrl ? (
+          <img src={avatarUrl} alt="" className="w-8 h-8 rounded-full" />
+        ) : (
+          <div className="w-8 h-8 rounded-full bg-white/[0.08] border border-border flex items-center justify-center text-xs font-semibold text-white">
+            {initials}
+          </div>
+        )}
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium text-text-primary truncate">Suhaas V</p>
+          <p className="text-sm font-medium text-text-primary truncate">{displayName}</p>
           <p className="text-[10px] text-text-muted">Paper Account</p>
         </div>
-        <button className="text-text-muted hover:text-text-primary transition-colors cursor-pointer">
+        <button onClick={signOut} className="text-text-muted hover:text-text-primary transition-colors cursor-pointer">
           <LogOut size={14} />
         </button>
       </div>
